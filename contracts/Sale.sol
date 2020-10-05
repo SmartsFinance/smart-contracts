@@ -13,14 +13,22 @@ contract Sale is ReentrancyGuard, Ownable {
 
     // SMARTS per ETH price
     uint256 buyPrice;
+    uint256 buyPriceBonus;
+    uint256 buyPriceBonusSecond;
     uint256 minimalGoal;
     uint256 hardCap;
 
     Smarts crowdsaleToken;
 
-    uint256 tokenUnit = (10 ** 16);
-    uint256 firstBonus = (1000 * (10 ** 18));
-    uint256 secondBonus = (2000 * (10 ** 18));
+    uint256 tokenUnit = (10 ** 18);
+    /**
+    // For testing purposes
+    uint256 firstBonus = (7 * (10 ** 18));
+    uint256 secondBonus = ((8 + 7) * (10 ** 18));
+    */
+
+    uint256 firstBonus = (710 * (10 ** 18));
+    uint256 secondBonus = ((800 + 710) * (10 ** 18));
 
     mapping (bytes4 => bool) inUse;
 
@@ -37,16 +45,18 @@ contract Sale is ReentrancyGuard, Ownable {
     /**
     Max Supply - 1,000,000 SMARTS
     Token Sale 
-    42,600 for Private sale (1ETH = 60 SMARTS) 
-    40,000 for Presale (1ETH = 50 SMARTS)
-    27,400 for Public Sale (1ETH = 45 SMARTS) 
+    42,600 for Private sale (1ETH = 60 SMARTS) (1,666666667E16)
+    40,000 for Presale (1ETH = 50 SMARTS)      (2E16) (0,747)
+    27,400 for Public Sale (1ETH = 45 SMARTS)  (2,222222222E16)
      */
     constructor(
         Smarts _token
     ) public {
-        minimalGoal = 2000000000000000000000;
-        hardCap = 1170000000000000000000;
-        buyPrice = 10000000000000000000000;
+        minimalGoal = 200000000000000000000;
+        hardCap = 700000000000000000000;
+        buyPrice = 22222222222222222;
+        buyPriceBonus = 16666666666666666;
+        buyPriceBonusSecond = 20000000000000000;
         crowdsaleToken = _token;
     }
 
@@ -96,40 +106,17 @@ contract Sale is ReentrancyGuard, Ownable {
         }
 
         // Apply Sale bonuses
-        uint256 valueWithBonus = _value;
-        uint256 bonusDiff;
-        uint256 currentBonus;
+        uint256 price = buyPrice;
         if (totalCollected < firstBonus) {
-            if (newTotalCollected > firstBonus) {
-                bonusDiff = newTotalCollected.sub(firstBonus);
-                currentBonus = _value.sub(bonusDiff);
-                valueWithBonus = valueWithBonus.add(currentBonus.div(100).mul(20));
-
-                if (bonusDiff > secondBonus) {
-                    bonusDiff = bonusDiff.sub(secondBonus);
-                    currentBonus = _value.sub(bonusDiff);
-                    valueWithBonus = valueWithBonus.add(currentBonus.div(100).mul(10));
-                    valueWithBonus = valueWithBonus.add(bonusDiff);
-                } else {
-                    valueWithBonus = valueWithBonus.add(bonusDiff.div(100).mul(10));
-                }
-
-            } else {
-                valueWithBonus = valueWithBonus.add(bonusDiff.div(100).mul(20));
-            }
+          require(newTotalCollected <= firstBonus, "Max tokens allowed");
+          price = buyPriceBonus;
         } else if (totalCollected < secondBonus) {
-            if (newTotalCollected > secondBonus) {
-                bonusDiff = newTotalCollected.sub(secondBonus);
-                currentBonus = _value.sub(bonusDiff);
-                valueWithBonus = valueWithBonus.add(currentBonus.div(100).mul(10));
-                valueWithBonus = valueWithBonus.add(bonusDiff);
-            } else {
-                valueWithBonus = valueWithBonus.add(valueWithBonus.div(100).mul(10));
-            }
+          require(newTotalCollected <= secondBonus, "Max tokens allowed");
+          price = buyPriceBonusSecond;
         }
 
         // token amount as per price
-        uint256 tokensSold = (valueWithBonus.mul(tokenUnit)).div(buyPrice);
+        uint256 tokensSold = (_value).div(price).mul(tokenUnit);
 
 
         // create new tokens for this buyer
@@ -199,9 +186,6 @@ contract Sale is ReentrancyGuard, Ownable {
     hasntStopped()  // crowdsale wasn't cancelled
   {
     require(_fundingAddress != address(0));
-
-    // start time must not be earlier than current time
-    require(_startTimestamp >= block.timestamp);
 
     // range must be sane
     require(_endTimestamp > _startTimestamp);

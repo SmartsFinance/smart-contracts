@@ -7,11 +7,11 @@ contract('Smarts', (accounts) => {
     const balance = await smartsInstance.balanceOf(accounts[0]);
     assert.equal(balance.valueOf(), 0, "0 wasn't in the first account");
 
-    await smartsInstance.issue(accounts[0], 10000, { from: accounts[0] });
+    await smartsInstance.issue(accounts[0], 60000, { from: accounts[0] });
 
     const newBalance = await smartsInstance.balanceOf(accounts[0]);
 
-    assert.equal(newBalance.valueOf(), 10000, "10000 wasn't in the first account");
+    assert.equal(newBalance.valueOf(), 60000, "10000 wasn't in the first account");
 
   });
 });
