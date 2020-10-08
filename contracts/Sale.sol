@@ -52,8 +52,8 @@ contract Sale is ReentrancyGuard, Ownable {
     constructor(
         Smarts _token
     ) public {
-        minimalGoal = 200000000000000000000;
-        hardCap = 700000000000000000000;
+        minimalGoal = 710000000000000000000;
+        hardCap = 2118888888888900000000;
         buyPrice = 22222222222222222;
         buyPriceBonus = 16666666666666666;
         buyPriceBonusSecond = 20000000000000000;
