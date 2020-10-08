@@ -7,8 +7,8 @@ Token: Coming soon
 Sale: Coming soon
 
 ## Ropsten
-Token: Coming soon
-Sale: Coming soon
+Token: 0xe350e7d7fced05c6712564218c3cab0a1d86b83d
+Sale: 0xd0371c7647b9fdcf8b3ee9c7c98d17af655da283
 
 # State of the art
 
