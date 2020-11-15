@@ -11,7 +11,7 @@ contract Sale is ReentrancyGuard, Ownable {
     // Crowdsale participants
     mapping(address => uint256) participants;
 
-    // SMARTS per ETH price
+    // SMARS per ETH price
     uint256 buyPrice;
     uint256 buyPriceBonus;
     uint256 minimalGoal;
@@ -41,10 +41,10 @@ contract Sale is ReentrancyGuard, Ownable {
 
 
     /**
-    Max Supply - 1,000,000 SMARTS
+    Max Supply - 1,000,000 SMATS
     Token Sale 
-    70,000 for Presale      (1ETH = 70 SMARTS)  (14285714285714285 wei) (0,01428571429 eth)
-    50,000 for Public Sale  (1ETH = 60 SMARTS)  (16666666666666666 wei) (0,01666666667 eth)
+    70,000 for Presale      (1ETH = 70 SMATS)  (14285714285714285 wei) (0,01428571429 eth)
+    50,000 for Public Sale  (1ETH = 60 SMATS)  (16666666666666666 wei) (0,01666666667 eth)
     */
 
     constructor(

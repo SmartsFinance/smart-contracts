@@ -69,7 +69,7 @@ contract Smarts is Ownable, IERC20 {
     }
 
     function issue(address _recepient, uint256 _amount) public onlyOwner() {
-        require(!releasedForTransfer, "SMARTS: Not released for transfer!");
+        require(!releasedForTransfer, "SMATS: Not released for transfer!");
         _balances[_recepient] = _balances[_recepient].add(_amount);
         _totalSupply = _totalSupply.add(_amount);
         emit Issue(_recepient, _amount);
@@ -85,7 +85,7 @@ contract Smarts is Ownable, IERC20 {
      * - the caller must have a balance of at least `amount`.
      */
     function transfer(address recipient, uint256 amount) public virtual override returns (bool) {
-		require(releasedForTransfer, "SMARTS: Not released for transfer!");
+		require(releasedForTransfer, "SMATS: Not released for transfer!");
         _transfer(_msgSender(), recipient, amount);
         return true;
     }
@@ -110,7 +110,7 @@ contract Smarts is Ownable, IERC20 {
     }
 
     function transferFrom(address sender, address recipient, uint256 amount) public virtual override returns (bool) {
-		require(releasedForTransfer, "SMARTS: Not released for transfer!");
+		require(releasedForTransfer, "SMATS: Not released for transfer!");
         _transfer(sender, recipient, amount);
         _approve(sender, _msgSender(), _allowances[sender][_msgSender()].sub(amount, "ERC20: transfer amount exceeds allowance"));
         return true;
