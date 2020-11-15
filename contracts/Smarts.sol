@@ -26,7 +26,7 @@ contract Smarts is Ownable, IERC20 {
 
     constructor () public {
         _name = "Smarts Finance";
-        _symbol = "SMATS";
+        _symbol = "SMAT";
         _decimals = 18;
     }
 
