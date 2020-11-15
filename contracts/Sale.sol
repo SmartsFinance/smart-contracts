@@ -44,7 +44,7 @@ contract Sale is ReentrancyGuard, Ownable {
     Max Supply - 1,000,000 SMARTS
     Token Sale 
     70,000 for Presale      (1ETH = 70 SMARTS)  (14285714285714285 wei) (0,01428571429 eth)
-    50,000 for Public Sale  (1ETH = 60 SMARTS)  (16666666670000000 wei) (0,01666666667 eth)
+    50,000 for Public Sale  (1ETH = 60 SMARTS)  (16666666666666666 wei) (0,01666666667 eth)
     */
 
     constructor(
@@ -52,7 +52,6 @@ contract Sale is ReentrancyGuard, Ownable {
     ) public {
         minimalGoal = 700000000000000000000;
         hardCap = 1833000000000000000000;
-        // buyPrice = 16666666670000000;
         buyPrice = 16666666666666666;
         buyPriceBonus = 14285714285714285;
         crowdsaleToken = _token;
