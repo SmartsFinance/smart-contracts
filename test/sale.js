@@ -21,19 +21,19 @@ contract('Smarts Sale', (accounts) => {
   });
 
   it('should buy with discount', async () => {
-    await contract.sendTransaction({from:accounts[0], value:1000000000000000000})
-    assert.equal((await erc20.balanceOf(accounts[0])).valueOf(), 60000000000000000000, "60 wasn't in the first account");
-
+    await contract.sendTransaction({from:accounts[0], value:1000000000000000000});
+    assert.equal((await erc20.balanceOf(accounts[0])).valueOf(), 70000000000000000000, "70 wasn't in the first account");
   });
 
 
-  it('should buy with 2 discount', async () => {
+  it('should buy without discount', async () => {
     await contract.sendTransaction({from:accounts[0], value:7000000000000000000});
+    assert.equal((await erc20.balanceOf(accounts[0])).valueOf(), 490000000000000000000, "490 wasn't in the first account");
     await contract.sendTransaction({from:accounts[1], value:1000000000000000000});
-    assert.equal((await erc20.balanceOf(accounts[1])).valueOf(), 50000000000000000000, "50 wasn't in the first account");
+    assert.equal((await erc20.balanceOf(accounts[1])).valueOf(), 60000000000000000000, "60 wasn't in the first account");
     await contract.sendTransaction({from:accounts[1], value:7000000000000000000});
     await contract.sendTransaction({from:accounts[2], value:1000000000000000000});
-    assert.equal((await erc20.balanceOf(accounts[2])).valueOf(), 45000000000000000000, "45 wasn't in the first account");
+    assert.equal((await erc20.balanceOf(accounts[2])).valueOf(), 60000000000000000000, "60 wasn't in the first account");
 
   });
 });

@@ -14,21 +14,18 @@ contract Sale is ReentrancyGuard, Ownable {
     // SMARTS per ETH price
     uint256 buyPrice;
     uint256 buyPriceBonus;
-    uint256 buyPriceBonusSecond;
     uint256 minimalGoal;
     uint256 hardCap;
 
     Smarts crowdsaleToken;
 
     uint256 tokenUnit = (10 ** 18);
-    /**
-    // For testing purposes
-    uint256 firstBonus = (7 * (10 ** 18));
-    uint256 secondBonus = ((8 + 7) * (10 ** 18));
-    */
-
-    uint256 firstBonus = (710 * (10 ** 18));
-    uint256 secondBonus = ((800 + 710) * (10 ** 18));
+    
+    // Testing
+    // uint256 firstBonus = (7 * (10 ** 18));
+    
+    // Production
+    uint256 firstBonus = (1000 * (10 ** 18));
 
     mapping (bytes4 => bool) inUse;
 
@@ -42,21 +39,22 @@ contract Sale is ReentrancyGuard, Ownable {
     uint256 totalCollected;
     uint256 totalSold;
 
+
     /**
     Max Supply - 1,000,000 SMARTS
     Token Sale 
-    42,600 for Private sale (1ETH = 60 SMARTS) (1,666666667E16)
-    40,000 for Presale (1ETH = 50 SMARTS)      (2E16) (0,747)
-    27,400 for Public Sale (1ETH = 45 SMARTS)  (2,222222222E16)
-     */
+    70,000 for Presale      (1ETH = 70 SMARTS)  (14285714285714285 wei) (0,01428571429 eth)
+    50,000 for Public Sale  (1ETH = 60 SMARTS)  (16666666670000000 wei) (0,01666666667 eth)
+    */
+
     constructor(
         Smarts _token
     ) public {
-        minimalGoal = 710000000000000000000;
-        hardCap = 2118888888888900000000;
-        buyPrice = 22222222222222222;
-        buyPriceBonus = 16666666666666666;
-        buyPriceBonusSecond = 20000000000000000;
+        minimalGoal = 700000000000000000000;
+        hardCap = 1833000000000000000000;
+        // buyPrice = 16666666670000000;
+        buyPrice = 16666666666666666;
+        buyPriceBonus = 14285714285714285;
         crowdsaleToken = _token;
     }
 
@@ -110,9 +108,6 @@ contract Sale is ReentrancyGuard, Ownable {
         if (totalCollected < firstBonus) {
           require(newTotalCollected <= firstBonus, "Max tokens allowed");
           price = buyPriceBonus;
-        } else if (totalCollected < secondBonus) {
-          require(newTotalCollected <= secondBonus, "Max tokens allowed");
-          price = buyPriceBonusSecond;
         }
 
         // token amount as per price
