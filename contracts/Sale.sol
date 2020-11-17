@@ -11,7 +11,7 @@ contract Sale is ReentrancyGuard, Ownable {
     // Crowdsale participants
     mapping(address => uint256) participants;
 
-    // SMARS per ETH price
+    // SMATS per ETH price
     uint256 buyPrice;
     uint256 buyPriceBonus;
     uint256 minimalGoal;
