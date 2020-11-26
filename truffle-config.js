@@ -8,7 +8,7 @@ module.exports = {
         },
         evmVersion: "byzantium"
        },
-      version: "0.6.2"
+      version: "0.6.4"
     }
   },
   // Uncommenting the defaults below 

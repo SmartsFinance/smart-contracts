@@ -1,4 +1,4 @@
-pragma solidity >=0.4.25 <0.7.0;
+pragma solidity 0.6.4;
 
 import "../node_modules/@openzeppelin/contracts/math/SafeMath.sol";
 import '../node_modules/@openzeppelin/contracts/utils/ReentrancyGuard.sol';
@@ -13,21 +13,12 @@ contract Sale is ReentrancyGuard, Ownable {
 
     // SMATS per ETH price
     uint256 buyPrice;
-    uint256 buyPriceBonus;
     uint256 minimalGoal;
     uint256 hardCap;
 
     Smarts crowdsaleToken;
 
     uint256 tokenUnit = (10 ** 18);
-    
-    // Testing
-    // uint256 firstBonus = (7 * (10 ** 18));
-    
-    // Production
-    uint256 firstBonus = (1000 * (10 ** 18));
-
-    mapping (bytes4 => bool) inUse;
 
     event SellToken(address recepient, uint tokensSold, uint value);
 
@@ -44,16 +35,14 @@ contract Sale is ReentrancyGuard, Ownable {
     Max Supply - 1,000,000 SMATS
     Token Sale 
     70,000 for Presale      (1ETH = 70 SMATS)  (14285714285714285 wei) (0,01428571429 eth)
-    50,000 for Public Sale  (1ETH = 60 SMATS)  (16666666666666666 wei) (0,01666666667 eth)
     */
 
     constructor(
         Smarts _token
     ) public {
-        minimalGoal = 700000000000000000000;
-        hardCap = 1833000000000000000000;
-        buyPrice = 16666666666666666;
-        buyPriceBonus = 14285714285714285;
+        minimalGoal = 500000000000000000000;
+        hardCap = 1000000000000000000000;
+        buyPrice = 14285714285714285;
         crowdsaleToken = _token;
     }
 
@@ -68,7 +57,7 @@ contract Sale is ReentrancyGuard, Ownable {
 
     // transfers crowdsale token from mintable to transferrable state
     function releaseTokens()
-    public
+    external
     onlyOwner()             // manager is CrowdsaleController instance
     hasntStopped()            // crowdsale wasn't cancelled
     whenCrowdsaleSuccessful() // crowdsale was successful
@@ -77,7 +66,8 @@ contract Sale is ReentrancyGuard, Ownable {
     }
 
     receive() external payable {
-        require(msg.value > 0, "Empty value");
+        require(msg.value >= 500000000000000000, "Min 0.5 eth");
+        require(msg.value <= 10000000000000000000, "Max 10 eth");
         sellTokens(msg.sender, msg.value);
     }
 
@@ -92,7 +82,6 @@ contract Sale is ReentrancyGuard, Ownable {
 
         if (hardCap < newTotalCollected) {
             // don't sell anything above the hard cap
-
             uint256 refund = newTotalCollected.sub(hardCap);
             uint256 diff = _value.sub(refund);
 
@@ -102,15 +91,8 @@ contract Sale is ReentrancyGuard, Ownable {
             newTotalCollected = totalCollected.add(_value);
         }
 
-        // Apply Sale bonuses
-        uint256 price = buyPrice;
-        if (totalCollected < firstBonus) {
-          require(newTotalCollected <= firstBonus, "Max tokens allowed");
-          price = buyPriceBonus;
-        }
-
         // token amount as per price
-        uint256 tokensSold = (_value).div(price).mul(tokenUnit);
+        uint256 tokensSold = (_value).div(buyPrice).mul(tokenUnit);
 
 
         // create new tokens for this buyer
@@ -132,7 +114,8 @@ contract Sale is ReentrancyGuard, Ownable {
     function withdraw(
         uint256 _amount // can be done partially
     )
-    public
+    external
+    nonReentrant
     onlyOwner() // project's owner
     hasntStopped()  // crowdsale wasn't cancelled
     whenCrowdsaleSuccessful() // crowdsale completed successfully
@@ -143,7 +126,8 @@ contract Sale is ReentrancyGuard, Ownable {
 
     // backers refund their ETH if the crowdsale was cancelled or has failed
     function refund()
-    public
+    external
+    nonReentrant
     {
         // either cancelled or failed
         require(stopped || isFailed(), "Not cancelled or failed");
@@ -157,7 +141,7 @@ contract Sale is ReentrancyGuard, Ownable {
         msg.sender.transfer(amount);
     }
 
-// cancels crowdsale
+  // cancels crowdsale
   function stop() public onlyOwner() hasntStopped()  {
     // we can stop only not started and not completed crowdsale
     if (started) {
