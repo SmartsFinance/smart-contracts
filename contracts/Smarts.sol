@@ -26,7 +26,7 @@ contract Smarts is Ownable, IERC20 {
 
     bool public releasedForTransfer;
 
-	event Issue(address recepient, uint amount);
+    event Issue(address recepient, uint amount);
 
     constructor () public {
         _name = "Smarts Finance";
