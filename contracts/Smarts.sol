@@ -7,7 +7,7 @@ import "../node_modules/@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 contract Smarts is Ownable, IERC20 {
 
-	using SafeMath for uint256;
+    using SafeMath for uint256;
     using Address for address;
 
     mapping (address => uint256) private _balances;
