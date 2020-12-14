@@ -14,6 +14,10 @@ contract Smarts is Ownable, IERC20 {
 
     mapping (address => mapping (address => uint256)) private _allowances;
 
+    mapping (address => bool) private _addressesWithFee;
+    address public _feescollector;
+    uint256 public _fee;
+
     uint256 private _totalSupply;
 
     string private _name;
@@ -28,6 +32,8 @@ contract Smarts is Ownable, IERC20 {
         _name = "Smarts Finance";
         _symbol = "SMAT";
         _decimals = 18;
+        _feescollector = msg.sender;
+        _fee = 50;
     }
 
     /**
@@ -63,6 +69,21 @@ contract Smarts is Ownable, IERC20 {
         return _balances[account];
     }
 
+    function setFee(uint256 amount) external onlyOwner() {
+        _fee = amount;
+    }
+
+    function changeFeeCollector(address addr) external onlyOwner() {
+        _feescollector = addr;
+    }
+
+    function addAddressForFee(address addr) external onlyOwner() {
+        _addressesWithFee[addr] = true;
+    }
+
+    function removeAddressForFee(address addr) external onlyOwner() {
+        _addressesWithFee[addr] = false;
+    }
 
     function release() public onlyOwner() {
         releasedForTransfer = true;
@@ -160,8 +181,21 @@ contract Smarts is Ownable, IERC20 {
         _beforeTokenTransfer(sender, recipient, amount);
 
         _balances[sender] = _balances[sender].sub(amount, "ERC20: transfer amount exceeds balance");
-        _balances[recipient] = _balances[recipient].add(amount);
-        emit Transfer(sender, recipient, amount);
+
+        if (_addressesWithFee[sender] || _addressesWithFee[recipient]) {
+
+            uint256 feeamount = amount.mul(_fee).div(10000);
+            uint256 remamount = amount.sub(feeamount);
+            _balances[_feescollector] = _balances[_feescollector].add(feeamount);
+            _balances[recipient] = _balances[recipient].add(remamount);
+
+            emit Transfer(sender, _feescollector, feeamount);
+            emit Transfer(sender, recipient, remamount);
+        } else {
+
+            _balances[recipient] = _balances[recipient].add(amount);
+            emit Transfer(sender, recipient, amount);
+        }
     }
 
     function _mint(address account, uint256 amount) internal virtual {

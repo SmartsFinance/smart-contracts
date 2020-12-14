@@ -34,15 +34,15 @@ contract Sale is ReentrancyGuard, Ownable {
     /**
     Max Supply - 1,000,000 SMATS
     Token Sale 
-    70,000 for Presale      (1ETH = 70 SMATS)  (14285714285714285 wei) (0,01428571429 eth)
+    70,000 for Presale      (1ETH = 130 SMATS)  (7692307692307692 wei) (0,07692307692307692 eth)
     */
 
     constructor(
         Smarts _token
     ) public {
-        minimalGoal = 500000000000000000000;
-        hardCap = 1000000000000000000000;
-        buyPrice = 14285714285714285;
+        minimalGoal = 1000000000000000000;
+        hardCap = 700000000000000000000;
+        buyPrice = 7692307692307692;
         crowdsaleToken = _token;
     }
 
@@ -63,11 +63,12 @@ contract Sale is ReentrancyGuard, Ownable {
     whenCrowdsaleSuccessful() // crowdsale was successful
     {
         crowdsaleToken.release();
+        crowdsaleToken.transferOwnership(owner());
     }
 
     receive() external payable {
-        require(msg.value >= 500000000000000000, "Min 0.5 eth");
-        require(msg.value <= 10000000000000000000, "Max 10 eth");
+        require(msg.value >= 200000000000000000, "Min 0.2 eth");
+        require(msg.value <= 20000000000000000000, "Max 20 eth");
         sellTokens(msg.sender, msg.value);
     }
 
