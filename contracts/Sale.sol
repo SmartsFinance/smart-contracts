@@ -34,7 +34,7 @@ contract Sale is ReentrancyGuard, Ownable {
     /**
     Max Supply - 1,000,000 SMATS
     Token Sale 
-    70,000 for Presale      (1ETH = 130 SMATS)  (7692307692307692 wei) (0,07692307692307692 eth)
+    91,000 for Presale      (1ETH = 130 SMATS)  (7692307692307692 wei) (0,07692307692307692 eth)
     */
 
     constructor(

@@ -22,7 +22,7 @@ ERC20 Token sale
 
 ## Instructions
 * Deploy the two contracts.
-* Call Smarts.issue to generate 890.000 tokens for the team.
+* Call Smarts.issue to generate 909.000 tokens for the team.
 * Call Sale.transferOwnership and give the Smarts address.
 * Call Sale.start
 

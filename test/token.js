@@ -28,6 +28,6 @@ contract('Smarts', (accounts) => {
 
     assert.equal(await smartsInstance.balanceOf(accounts[1]).valueOf(), 100000000000000000000, "100 wasn't in the account");
     await smartsInstance.transfer(accounts[2], new BN('100000000000000000000'), { from: accounts[0] });
-    assert.equal(await smartsInstance.balanceOf(accounts[2]).valueOf(), 99500000000000000000, "950 wasn't in the account");
+    assert.equal(await smartsInstance.balanceOf(accounts[2]).valueOf(), 99500000000000000000, "995 wasn't in the account");
   });
 });
