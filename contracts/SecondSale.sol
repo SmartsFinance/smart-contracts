@@ -34,15 +34,15 @@ contract SecondSale is ReentrancyGuard, Ownable {
     /**
     Max Supply - 1,000,000 SMATS
     Token Sale 
-    91,000 for Presale      (1ETH = 130 SMATS)  (7692307692307692 wei) (0,07692307692307692 eth)
+    159,000 for Presale      (1ETH = 125 SMATS)  (8000000000000000 wei) (0,008 eth)
     */
 
     constructor(
         Smarts _token
     ) public {
-        minimalGoal = 1000000000000000000;
-        hardCap = 700000000000000000000;
-        buyPrice = 7692307692307692;
+        minimalGoal = 500000000000000000000;
+        hardCap = 1272000000000000000000;
+        buyPrice = 8000000000000000;
         crowdsaleToken = _token;
     }
 
@@ -112,6 +112,15 @@ contract SecondSale is ReentrancyGuard, Ownable {
     {
         require(_amount <= address(this).balance, "Not enough funds");
         fundingAddress.transfer(_amount);
+    }
+
+    function burnUnsold()
+    external
+    nonReentrant
+    onlyOwner() // project's owner
+    hasntStopped()  // crowdsale wasn't cancelled
+    whenCrowdsaleSuccessful() // crowdsale completed successfully
+    {
         crowdsaleToken.burn(crowdsaleToken.balanceOf(address(this)));
     }
 

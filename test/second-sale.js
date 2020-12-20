@@ -15,7 +15,7 @@ contract('Smarts Sale', (accounts) => {
         {from: accounts[0]}
     );
     console.log('contacts');
-    erc20.issue(contract.address, '91000000000000000000000', {from: accounts[0]});
+    erc20.issue(contract.address, '159000000000000000000000', {from: accounts[0]});
     erc20.release();
     const date = new Date();
     await contract.start(parseInt((date.getTime() / 1000)-10000), parseInt((date.getTime() / 1000)+10000), accounts[3], {from: accounts[0]});
@@ -23,11 +23,12 @@ contract('Smarts Sale', (accounts) => {
 
 
   it('should buy ', async () => {
+    // NOTE! To run this test you have to change the hardcap to 700000000000000000000
     await contract.sendTransaction({from:accounts[1], value:1000000000000000000});
-    assert.equal((await erc20.balanceOf(accounts[1])).valueOf(), 130000000000000000000, "130 wasn't in the first account");
+    assert.equal((await erc20.balanceOf(accounts[1])).valueOf(), 125000000000000000000, "125 wasn't in the first account");
     await contract.sendTransaction({from:accounts[1], value:7000000000000000000});
     await contract.sendTransaction({from:accounts[2], value:1000000000000000000});
-    assert.equal((await erc20.balanceOf(accounts[2])).valueOf(), 130000000000000000000, "130 wasn't in the second account");
+    assert.equal((await erc20.balanceOf(accounts[2])).valueOf(), 125000000000000000000, "125 wasn't in the second account");
     for (let i = 0; i < 9; i++) {
       await contract.sendTransaction({from:accounts[1], value:10000000000000000000});
       await contract.sendTransaction({from:accounts[2], value:10000000000000000000});
@@ -44,8 +45,8 @@ contract('Smarts Sale', (accounts) => {
       await contract.sendTransaction({from:accounts[7], value:10000000000000000000});
       await contract.sendTransaction({from:accounts[8], value:10000000000000000000});
     }
-
-
+    assert.equal(await erc20.totalSupply(), '159000000000000000000000', 'Incorrect total supply');
+    await contract.burnUnsold({from: accounts[0]});
   });
 
   it('should fail if value is less than 0.2 eth', async function () {
