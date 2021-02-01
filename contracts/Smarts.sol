@@ -5,6 +5,10 @@ import "../node_modules/@openzeppelin/contracts/math/SafeMath.sol";
 import "../node_modules/@openzeppelin/contracts/utils/Address.sol";
 import "../node_modules/@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
+contract Wallet {
+
+}
+
 contract Smarts is Ownable, IERC20 {
 
     using SafeMath for uint256;
@@ -15,25 +19,46 @@ contract Smarts is Ownable, IERC20 {
     mapping (address => mapping (address => uint256)) private _allowances;
 
     mapping (address => bool) private _addressesWithFee;
+    mapping (address => bool) private _excluded;
     address public _feescollector;
+    address public _emptyWallet;
     uint256 public _fee;
+    uint256 public _feeToDistribute;
 
     uint256 private _totalSupply;
 
     string private _name;
     string private _symbol;
-    uint8 private _decimals;
-
-    bool public releasedForTransfer;
+    uint8 private constant _decimals = 18;
 
     event Issue(address recepient, uint amount);
+
+    uint256 private constant MAX_UINT256 = ~uint256(0);
+    uint256 public _elasticSupply = MAX_UINT256; // ToDo Make private
+    uint256 private constant INITIAL_FRAGMENTS_SUPPLY = 1000000 * uint(10)**_decimals;
+    // TOTAL_GONS is a multiple of INITIAL_FRAGMENTS_SUPPLY so that _gonsPerFragment is an integer.
+    // Use the highest value that fits in a uint256 for max granularity.
+    uint256 private constant TOTAL_GONS = MAX_UINT256 - (MAX_UINT256 % INITIAL_FRAGMENTS_SUPPLY);
+    uint256 public _gonsPerFragment; // ToDo Make private
+
+    uint256 private constant MAX_SUPPLY = ~uint128(0);  // (2^128) - 1
 
     constructor () public {
         _name = "Smarts Finance";
         _symbol = "SMAT";
-        _decimals = 18;
         _feescollector = msg.sender;
         _fee = 50;
+        _feeToDistribute = 40;
+        _issue(msg.sender, INITIAL_FRAGMENTS_SUPPLY);
+        _elasticSupply = _totalSupply;
+        _emptyWallet = address(new Wallet());
+
+        _gonsPerFragment = TOTAL_GONS.div(_elasticSupply);
+
+        _balances[msg.sender] = INITIAL_FRAGMENTS_SUPPLY.mul(_gonsPerFragment);
+
+        _excluded[_emptyWallet] = true;
+
     }
 
     /**
@@ -51,7 +76,7 @@ contract Smarts is Ownable, IERC20 {
         return _symbol;
     }
 
-    function decimals() public view returns (uint8) {
+    function decimals() public pure returns (uint8) {
         return _decimals;
     }
 
@@ -66,11 +91,18 @@ contract Smarts is Ownable, IERC20 {
      * @dev See {IERC20-balanceOf}.
      */
     function balanceOf(address account) public view override returns (uint256) {
-        return _balances[account];
+        if (_excluded[account]) {
+            return 0;
+        }
+        return _balances[account].div(_gonsPerFragment);
     }
 
     function setFee(uint256 amount) external onlyOwner() {
         _fee = amount;
+    }
+
+    function setFeeToDistribute(uint256 amount) external onlyOwner() {
+        _feeToDistribute = amount;
     }
 
     function changeFeeCollector(address addr) external onlyOwner() {
@@ -85,18 +117,6 @@ contract Smarts is Ownable, IERC20 {
         _addressesWithFee[addr] = false;
     }
 
-    function release() public onlyOwner() {
-        releasedForTransfer = true;
-    }
-
-    function issue(address _recepient, uint256 _amount) public onlyOwner() {
-        require(!releasedForTransfer, "SMATS: Not released for transfer!");
-        _balances[_recepient] = _balances[_recepient].add(_amount);
-        _totalSupply = _totalSupply.add(_amount);
-        emit Issue(_recepient, _amount);
-        emit Transfer(address(0), _recepient, _amount);
-    }
-
     /**
      * @dev See {IERC20-transfer}.
      *
@@ -106,7 +126,6 @@ contract Smarts is Ownable, IERC20 {
      * - the caller must have a balance of at least `amount`.
      */
     function transfer(address recipient, uint256 amount) public virtual override returns (bool) {
-		require(releasedForTransfer, "SMATS: Not released for transfer!");
         _transfer(_msgSender(), recipient, amount);
         return true;
     }
@@ -131,7 +150,6 @@ contract Smarts is Ownable, IERC20 {
     }
 
     function transferFrom(address sender, address recipient, uint256 amount) public virtual override returns (bool) {
-		require(releasedForTransfer, "SMATS: Not released for transfer!");
         _transfer(sender, recipient, amount);
         _approve(sender, _msgSender(), _allowances[sender][_msgSender()].sub(amount, "ERC20: transfer amount exceeds allowance"));
         return true;
@@ -174,23 +192,41 @@ contract Smarts is Ownable, IERC20 {
         _burn(account, amount);
     }
 
-    function _transfer(address sender, address recipient, uint256 amount) internal virtual {
+
+    function _issue(address _recepient, uint256 _amount) internal {
+        _balances[_recepient] = _balances[_recepient].add(_amount);
+        _totalSupply = _totalSupply.add(_amount);
+        emit Issue(_recepient, _amount);
+        emit Transfer(address(0), _recepient, _amount);
+    }
+
+    function _transfer(address sender, address recipient, uint256 _amount) internal virtual {
         require(sender != address(0), "ERC20: transfer from the zero address");
         require(recipient != address(0), "ERC20: transfer to the zero address");
 
-        _beforeTokenTransfer(sender, recipient, amount);
+        uint256 amount = _amount.mul(_gonsPerFragment);
 
         _balances[sender] = _balances[sender].sub(amount, "ERC20: transfer amount exceeds balance");
 
         if (_addressesWithFee[sender] || _addressesWithFee[recipient]) {
 
-            uint256 feeamount = amount.mul(_fee).div(10000);
-            uint256 remamount = amount.sub(feeamount);
-            _balances[_feescollector] = _balances[_feescollector].add(feeamount);
+            uint256 feeamount = _amount.mul(_fee).div(10000);
+            uint256 remamount = _amount.sub(feeamount).mul(_gonsPerFragment);
             _balances[recipient] = _balances[recipient].add(remamount);
-
-            emit Transfer(sender, _feescollector, feeamount);
             emit Transfer(sender, recipient, remamount);
+
+            // Fee dist
+            uint256 feeamountToPool = feeamount.mul(_feeToDistribute).div(10000);
+            uint256 remamountToPool = feeamount.sub(feeamountToPool).mul(_gonsPerFragment);
+
+
+            _balances[_feescollector] = _balances[_feescollector].add(remamountToPool);
+            emit Transfer(sender, _feescollector, remamountToPool);
+
+            uint256 finalFeeAmount = feeamountToPool.mul(_gonsPerFragment);
+            _balances[_emptyWallet] = _balances[_emptyWallet].add(finalFeeAmount);
+            emit Transfer(sender, _emptyWallet, finalFeeAmount);
+            rebase(feeamountToPool);
         } else {
 
             _balances[recipient] = _balances[recipient].add(amount);
@@ -201,8 +237,6 @@ contract Smarts is Ownable, IERC20 {
     function _mint(address account, uint256 amount) internal virtual {
         require(account != address(0), "ERC20: mint to the zero address");
 
-        _beforeTokenTransfer(address(0), account, amount);
-
         _totalSupply = _totalSupply.add(amount);
         _balances[account] = _balances[account].add(amount);
         emit Transfer(address(0), account, amount);
@@ -211,9 +245,7 @@ contract Smarts is Ownable, IERC20 {
     function _burn(address account, uint256 amount) internal virtual {
         require(account != address(0), "ERC20: burn from the zero address");
 
-        _beforeTokenTransfer(account, address(0), amount);
-
-        _balances[account] = _balances[account].sub(amount, "ERC20: burn amount exceeds balance");
+        _balances[account] = _balances[account].sub(amount.mul(_gonsPerFragment), "ERC20: burn amount exceeds balance");
         _totalSupply = _totalSupply.sub(amount);
         emit Transfer(account, address(0), amount);
     }
@@ -226,9 +258,10 @@ contract Smarts is Ownable, IERC20 {
         emit Approval(owner, spender, amount);
     }
 
-    function _setupDecimals(uint8 decimals_) internal {
-        _decimals = decimals_;
+    function rebase(uint256 feeamount)
+        internal
+    {
+        _elasticSupply = _elasticSupply.add(feeamount);
+        _gonsPerFragment = TOTAL_GONS.div(_elasticSupply);
     }
-
-    function _beforeTokenTransfer(address from, address to, uint256 amount) internal virtual { }
 }

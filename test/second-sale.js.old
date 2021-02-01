@@ -15,8 +15,8 @@ contract('Smarts Sale', (accounts) => {
         {from: accounts[0]}
     );
     console.log('contacts');
-    erc20.issue(contract.address, '159000000000000000000000', {from: accounts[0]});
-    erc20.release();
+    // erc20.issue(contract.address, '159000000000000000000000', {from: accounts[0]});
+    // erc20.release();
     const date = new Date();
     await contract.start(parseInt((date.getTime() / 1000)-10000), parseInt((date.getTime() / 1000)+10000), accounts[3], {from: accounts[0]});
   });
