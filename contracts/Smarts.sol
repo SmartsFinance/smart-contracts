@@ -34,12 +34,12 @@ contract Smarts is Ownable, IERC20 {
     event Issue(address recepient, uint amount);
 
     uint256 private constant MAX_UINT256 = ~uint256(0);
-    uint256 public _elasticSupply = MAX_UINT256; // ToDo Make private
+    uint256 private _elasticSupply = MAX_UINT256;
     uint256 private constant INITIAL_FRAGMENTS_SUPPLY = 1000000 * uint(10)**_decimals;
     // TOTAL_GONS is a multiple of INITIAL_FRAGMENTS_SUPPLY so that _gonsPerFragment is an integer.
     // Use the highest value that fits in a uint256 for max granularity.
     uint256 private constant TOTAL_GONS = MAX_UINT256 - (MAX_UINT256 % INITIAL_FRAGMENTS_SUPPLY);
-    uint256 public _gonsPerFragment; // ToDo Make private
+    uint256 private _gonsPerFragment;
 
     uint256 private constant MAX_SUPPLY = ~uint128(0);  // (2^128) - 1
 
@@ -47,8 +47,8 @@ contract Smarts is Ownable, IERC20 {
         _name = "Smarts Finance";
         _symbol = "SMAT";
         _feescollector = msg.sender;
-        _fee = 50;
-        _feeToDistribute = 40;
+        _fee = 100; // 1%
+        _feeToDistribute = 400; // 40% from the 1%
         _issue(msg.sender, INITIAL_FRAGMENTS_SUPPLY);
         _elasticSupply = _totalSupply;
         _emptyWallet = address(new Wallet());
@@ -208,7 +208,7 @@ contract Smarts is Ownable, IERC20 {
 
         _balances[sender] = _balances[sender].sub(amount, "ERC20: transfer amount exceeds balance");
 
-        if (_addressesWithFee[sender] || _addressesWithFee[recipient]) {
+        if (_fee != 0 && (_addressesWithFee[sender] || _addressesWithFee[recipient])) {
 
             uint256 feeamount = _amount.mul(_fee).div(10000);
             uint256 remamount = _amount.sub(feeamount).mul(_gonsPerFragment);

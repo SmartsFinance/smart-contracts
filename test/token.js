@@ -24,10 +24,8 @@ contract('Smarts', (accounts) => {
     await smartsInstance.transfer(accounts[1], new BN('1000000000000000000000000'), { from: accounts[0] });
                                                                         
     assert.equal(await smartsInstance.balanceOf(accounts[0]).valueOf(), 0, "0 wasn't in the account");
-    assert.equal(await smartsInstance.balanceOf(accounts[1]).valueOf(), 995019900000000000000000, "995019 wasn't in the account");
-    assert.equal(await smartsInstance.balanceOf(accounts[4]).valueOf(), 4980099600000000000000, "4980 wasn't in the account");
-
-    await smartsInstance.transfer(accounts[2], new BN('995019900000000000000000'), { from: accounts[1] });
+    assert.equal(await smartsInstance.balanceOf(accounts[1]).valueOf(), 990396000000000000000000, "995019 wasn't in the account");
+    assert.equal(await smartsInstance.balanceOf(accounts[4]).valueOf(), 9603840000000000000000, "4980 wasn't in the account");
   });
 
   it('should apply fee if address is selected', async () => {
@@ -41,11 +39,9 @@ contract('Smarts', (accounts) => {
 
     assert.equal(await smartsInstance.balanceOf(accounts[1]).valueOf(), 100000000000000000000, "100 wasn't in the account");
     await smartsInstance.transfer(accounts[2], new BN('100000000000000000000'), { from: accounts[0] });
-    console.log(web3.utils.fromWei((await smartsInstance._gonsPerFragment.call()).valueOf(), "ether" ));
-    console.log(web3.utils.fromWei((await smartsInstance._elasticSupply.call()).valueOf(), "ether" ));
     console.log(web3.utils.fromWei(await smartsInstance.balanceOf(accounts[1]).valueOf(), "ether" ));
-    console.log(web3.utils.fromWei(await smartsInstance.balanceOf(accounts[4]).valueOf(), "ether" ));
-    assert.equal(await smartsInstance.balanceOf(accounts[1]).valueOf(), 100000000200000000000, "100 wasn't in the account");
-    assert.equal(await smartsInstance.balanceOf(accounts[2]).valueOf(), 99500000199000000000, "995 wasn't in the account");
+    console.log(web3.utils.fromWei(await smartsInstance.balanceOf(accounts[2]).valueOf(), "ether" ));
+    assert.equal(await smartsInstance.balanceOf(accounts[1]).valueOf(), 100000004000000000000, "100 wasn't in the account");
+    assert.equal(await smartsInstance.balanceOf(accounts[2]).valueOf(), 99000003960000000000, "995 wasn't in the account");
   });
 });
