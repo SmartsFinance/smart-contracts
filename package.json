@@ -8,10 +8,9 @@
   },
   "scripts": {
     "test": "truffle test",
-    "flatten-all": "del-cli ./dist && mkdir \\dist && npm run flatten-erc20 && npm run flatten-sale && npm run flatten-second-sale",
-    "flatten-erc20": "truffle-flattener contracts/Smarts.sol > dist/SmartsFlatten.sol",
-    "flatten-sale": "truffle-flattener contracts/Sale.sol > dist/SaleFlatten.sol",
-    "flatten-second-sale": "truffle-flattener contracts/SecondSale.sol > dist/SecondSaleFlatten.sol"
+    "coverage": "truffle run coverage",
+    "flatten-all": "del-cli ./dist && mkdir \\dist && npm run flatten-erc20",
+    "flatten-erc20": "truffle-flattener contracts/Smarts.sol > dist/SmartsFlatten.sol"
   },
   "author": "",
   "license": "ISC",
@@ -22,6 +21,7 @@
     "@openzeppelin/test-helpers": "^0.5.6",
     "chai": "^4.2.0",
     "del-cli": "^3.0.1",
+    "solidity-coverage": "^0.7.14",
     "truffle-flattener": "^1.5.0"
   }
 }

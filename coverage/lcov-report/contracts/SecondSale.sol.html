@@ -1,0 +1,857 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for contracts/SecondSale.sol</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../prettify.css" />
+    <link rel="stylesheet" href="../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../index.html">all files</a> / <a href="index.html">contracts/</a> SecondSale.sol
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>0/46</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>0/38</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>0/18</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>0/56</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262
+263
+264
+265</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">pragma solidity 0.6.4;
+&nbsp;
+import "../node_modules/@openzeppelin/contracts/math/SafeMath.sol";
+import '../node_modules/@openzeppelin/contracts/utils/ReentrancyGuard.sol';
+import "../node_modules/@openzeppelin/contracts/access/Ownable.sol";
+import "./Smarts.sol";
+&nbsp;
+contract SecondSale is ReentrancyGuard, Ownable {
+    using SafeMath for uint256;
+&nbsp;
+    // Crowdsale participants
+    mapping(address =&gt; uint256) participants;
+&nbsp;
+    // SMATS per ETH price
+    uint256 buyPrice;
+    uint256 minimalGoal;
+    uint256 hardCap;
+&nbsp;
+    Smarts crowdsaleToken;
+&nbsp;
+    uint256 tokenUnit = (10 ** 18);
+&nbsp;
+    event SellToken(address recepient, uint tokensSold, uint value);
+&nbsp;
+    address payable fundingAddress;
+    uint256 startTimestamp;
+    uint256 endTimestamp;
+    bool started;
+    bool stopped;
+    uint256 totalCollected;
+    uint256 totalSold;
+&nbsp;
+&nbsp;
+    /**
+    Max Supply - 1,000,000 SMATS
+    Token Sale 
+    159,000 for Presale      (1ETH = 125 SMATS)  (8000000000000000 wei) (0,008 eth)
+    */
+&nbsp;
+<span class="fstat-no" title="function not covered" >    constructor(</span>
+        Smarts _token
+    ) public {
+<span class="cstat-no" title="statement not covered" >        minimalGoal = 500000000000000000000</span>;
+<span class="cstat-no" title="statement not covered" >        hardCap = 1272000000000000000000</span>;
+<span class="cstat-no" title="statement not covered" >        buyPrice = 8000000000000000</span>;
+<span class="cstat-no" title="statement not covered" >        crowdsaleToken = _token</span>;
+    }
+&nbsp;
+    // returns address of the erc20 smarts token
+<span class="fstat-no" title="function not covered" >    function getToken()</span>
+    public
+    view
+    returns(address)
+    {
+<span class="cstat-no" title="statement not covered" >        return address(crowdsaleToken);</span>
+    }
+&nbsp;
+    receive() external payable {
+        require(msg.value &gt;= 200000000000000000, "Min 0.2 eth");
+        require(msg.value &lt;= 20000000000000000000, "Max 20 eth");
+        sellTokens(msg.sender, msg.value);
+    }
+&nbsp;
+    // sels the project's token to buyers
+<span class="fstat-no" title="function not covered" >    function sellTokens(address payable _recepient, uint256 _value) internal</span>
+        nonReentrant
+        hasBeenStarted()     // crowdsale started
+        hasntStopped()       // wasn't cancelled by owner
+        whenCrowdsaleAlive() // in active state
+    {
+<span class="cstat-no" title="statement not covered" >        uint256 newTotalCollected = totalCollected.add(_value);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        if (hardCap &lt; newTotalCollected) {</span>
+            // don't sell anything above the hard cap
+<span class="cstat-no" title="statement not covered" >            uint256 refund = newTotalCollected.sub(hardCap);</span>
+<span class="cstat-no" title="statement not covered" >            uint256 diff = _value.sub(refund);</span>
+&nbsp;
+            // send the ETH part which exceeds the hard cap back to the buyer
+<span class="cstat-no" title="statement not covered" >            _recepient.transfer(refund)</span>;
+<span class="cstat-no" title="statement not covered" >            _value = diff</span>;
+<span class="cstat-no" title="statement not covered" >            newTotalCollected = totalCollected.add(_value)</span>;
+        }
+&nbsp;
+        // token amount as per price
+<span class="cstat-no" title="statement not covered" >        uint256 tokensSold = (_value).div(buyPrice).mul(tokenUnit);</span>
+&nbsp;
+&nbsp;
+        // transfer tokens for this buyer
+<span class="cstat-no" title="statement not covered" >        require(crowdsaleToken.transfer(_recepient, tokensSold), "Error transfering")</span>;
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        emit SellToken(_recepient, tokensSold, _value);</span>
+&nbsp;
+        // remember the buyer so he/she/it may refund its ETH if crowdsale failed
+<span class="cstat-no" title="statement not covered" >        participants[_recepient] = participants[_recepient].add(_value)</span>;
+&nbsp;
+        // update total ETH collected
+<span class="cstat-no" title="statement not covered" >        totalCollected = totalCollected.add(_value)</span>;
+&nbsp;
+        // update total tokens sold
+<span class="cstat-no" title="statement not covered" >        totalSold = totalSold.add(tokensSold)</span>;
+    }
+&nbsp;
+    // project's owner withdraws ETH funds to the funding address upon successful crowdsale
+<span class="fstat-no" title="function not covered" >    function withdraw(</span>
+        uint256 _amount // can be done partially
+    )
+    external
+    nonReentrant
+    onlyOwner() // project's owner
+    hasntStopped()  // crowdsale wasn't cancelled
+    whenCrowdsaleSuccessful() // crowdsale completed successfully
+    {
+<span class="cstat-no" title="statement not covered" >        require(_amount &lt;= address(this).balance, "Not enough funds")</span>;
+<span class="cstat-no" title="statement not covered" >        fundingAddress.transfer(_amount)</span>;
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    function burnUnsold()</span>
+    external
+    nonReentrant
+    onlyOwner() // project's owner
+    hasntStopped()  // crowdsale wasn't cancelled
+    whenCrowdsaleSuccessful() // crowdsale completed successfully
+    {
+<span class="cstat-no" title="statement not covered" >        crowdsaleToken.burn(crowdsaleToken.balanceOf(address(this)))</span>;
+    }
+&nbsp;
+    // backers refund their ETH if the crowdsale was cancelled or has failed
+<span class="fstat-no" title="function not covered" >    function refund()</span>
+    external
+    nonReentrant
+    {
+        // either cancelled or failed
+<span class="cstat-no" title="statement not covered" >        require(stopped || isFailed(), "Not cancelled or failed")</span>;
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        uint256 amount = participants[msg.sender];</span>
+&nbsp;
+        // prevent from doing it twice
+<span class="cstat-no" title="statement not covered" >        require(amount &gt; 0, "Only once")</span>;
+<span class="cstat-no" title="statement not covered" >        participants[msg.sender] = 0</span>;
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        msg.sender.transfer(amount)</span>;
+    }
+&nbsp;
+  // cancels crowdsale
+<span class="fstat-no" title="function not covered" >  function stop() public onlyOwner() hasntStopped()  {</span>
+    // we can stop only not started and not completed crowdsale
+<span class="cstat-no" title="statement not covered" >    if (started) {</span>
+<span class="cstat-no" title="statement not covered" >      require(!isFailed())</span>;
+<span class="cstat-no" title="statement not covered" >      require(!isSuccessful())</span>;
+    }
+<span class="cstat-no" title="statement not covered" >    stopped = true</span>;
+  }
+&nbsp;
+  // called by CrowdsaleController to setup start and end time of crowdfunding process
+  // as well as funding address (where to transfer ETH upon successful crowdsale)
+<span class="fstat-no" title="function not covered" >  function start(</span>
+    uint256 _startTimestamp,
+    uint256 _endTimestamp,
+    address payable _fundingAddress
+  )
+    public
+    onlyOwner()   // manager is CrowdsaleController instance
+    hasntStarted()  // not yet started
+    hasntStopped()  // crowdsale wasn't cancelled
+  {
+<span class="cstat-no" title="statement not covered" >    require(_fundingAddress != address(0))</span>;
+&nbsp;
+    // range must be sane
+<span class="cstat-no" title="statement not covered" >    require(_endTimestamp &gt; _startTimestamp)</span>;
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    startTimestamp = _startTimestamp</span>;
+<span class="cstat-no" title="statement not covered" >    endTimestamp = _endTimestamp</span>;
+<span class="cstat-no" title="statement not covered" >    fundingAddress = _fundingAddress</span>;
+&nbsp;
+    // now crowdsale is considered started, even if the current time is before startTimestamp
+<span class="cstat-no" title="statement not covered" >    started = true</span>;
+  }
+&nbsp;
+  // must return true if crowdsale is over, but it failed
+<span class="fstat-no" title="function not covered" >  function isFailed()</span>
+    public
+    view
+    returns(bool)
+  {
+<span class="cstat-no" title="statement not covered" >    return (</span>
+      // it was started
+      started &amp;&amp;
+&nbsp;
+      // crowdsale period has finished
+      block.timestamp &gt;= endTimestamp &amp;&amp;
+&nbsp;
+      // but collected ETH is below the required minimum
+      totalCollected &lt; minimalGoal
+    );
+  }
+&nbsp;
+  // must return true if crowdsale is active (i.e. the token can be bought)
+<span class="fstat-no" title="function not covered" >  function isActive()</span>
+    public
+    view
+    returns(bool)
+  {
+<span class="cstat-no" title="statement not covered" >    return (</span>
+      // it was started
+      started &amp;&amp;
+&nbsp;
+      // hard cap wasn't reached yet
+      totalCollected &lt; hardCap &amp;&amp;
+&nbsp;
+      // and current time is within the crowdfunding period
+      block.timestamp &gt;= startTimestamp &amp;&amp;
+      block.timestamp &lt; endTimestamp
+    );
+  }
+&nbsp;
+  // must return true if crowdsale completed successfully
+<span class="fstat-no" title="function not covered" >  function isSuccessful()</span>
+    public
+    view
+    returns(bool)
+  {
+<span class="cstat-no" title="statement not covered" >    return (</span>
+      // either the hard cap is collected
+      totalCollected &gt;= hardCap ||
+&nbsp;
+      // ...or the crowdfunding period is over, but the minimum has been reached
+      (block.timestamp &gt;= endTimestamp &amp;&amp; totalCollected &gt;= minimalGoal)
+    );
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  modifier whenCrowdsaleAlive() {</span>
+<span class="cstat-no" title="statement not covered" >    require(isActive())</span>;
+    _;
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  modifier whenCrowdsaleFailed() {</span>
+<span class="cstat-no" title="statement not covered" >    require(isFailed())</span>;
+    _;
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  modifier whenCrowdsaleSuccessful() {</span>
+<span class="cstat-no" title="statement not covered" >    require(isSuccessful())</span>;
+    _;
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  modifier hasntStopped() {</span>
+<span class="cstat-no" title="statement not covered" >    require(!stopped)</span>;
+    _;
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  modifier hasBeenStopped() {</span>
+<span class="cstat-no" title="statement not covered" >    require(stopped)</span>;
+    _;
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  modifier hasntStarted() {</span>
+<span class="cstat-no" title="statement not covered" >    require(!started)</span>;
+    _;
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  modifier hasBeenStarted() {</span>
+<span class="cstat-no" title="statement not covered" >    require(started)</span>;
+    _;
+  }
+}</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Thu Feb 04 2021 19:20:17 GMT+0100 (Central European Standard Time)
+</div>
+</div>
+<script src="../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../sorter.js"></script>
+</body>
+</html>

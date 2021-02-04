@@ -5,10 +5,6 @@ import "../node_modules/@openzeppelin/contracts/math/SafeMath.sol";
 import "../node_modules/@openzeppelin/contracts/utils/Address.sol";
 import "../node_modules/@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
-contract Wallet {
-
-}
-
 contract Smarts is Ownable, IERC20 {
 
     using SafeMath for uint256;
@@ -19,9 +15,8 @@ contract Smarts is Ownable, IERC20 {
     mapping (address => mapping (address => uint256)) private _allowances;
 
     mapping (address => bool) private _addressesWithFee;
-    mapping (address => bool) private _excluded;
     address public _feescollector;
-    address public _emptyWallet;
+    address public _emptyWallet = address(0);
     uint256 public _fee;
     uint256 public _feeToDistribute;
 
@@ -51,17 +46,13 @@ contract Smarts is Ownable, IERC20 {
         _feeToDistribute = 400; // 40% from the 1%
         _issue(msg.sender, INITIAL_FRAGMENTS_SUPPLY);
         _elasticSupply = _totalSupply;
-        _emptyWallet = address(new Wallet());
-
         _gonsPerFragment = TOTAL_GONS.div(_elasticSupply);
 
         _balances[msg.sender] = INITIAL_FRAGMENTS_SUPPLY.mul(_gonsPerFragment);
 
-        _excluded[_emptyWallet] = true;
-
     }
 
-    /**
+    /** 
      * @dev Returns the name of the token.
      */
     function name() public view returns (string memory) {
@@ -91,9 +82,6 @@ contract Smarts is Ownable, IERC20 {
      * @dev See {IERC20-balanceOf}.
      */
     function balanceOf(address account) public view override returns (uint256) {
-        if (_excluded[account]) {
-            return 0;
-        }
         return _balances[account].div(_gonsPerFragment);
     }
 
@@ -209,37 +197,42 @@ contract Smarts is Ownable, IERC20 {
         _balances[sender] = _balances[sender].sub(amount, "ERC20: transfer amount exceeds balance");
 
         if (_fee != 0 && (_addressesWithFee[sender] || _addressesWithFee[recipient])) {
-
+            // Let's a pply a fee to this tx
             uint256 feeamount = _amount.mul(_fee).div(10000);
-            uint256 remamount = _amount.sub(feeamount).mul(_gonsPerFragment);
+
+            // Original remaining amount
+            uint256 remamountOrg = _amount.sub(feeamount);
+
+            // Value of remaining amount
+            uint256 remamount = remamountOrg.mul(_gonsPerFragment);
             _balances[recipient] = _balances[recipient].add(remamount);
-            emit Transfer(sender, recipient, remamount);
+            emit Transfer(sender, recipient, remamountOrg);
 
-            // Fee dist
+            // Now let's distribute the fee
             uint256 feeamountToPool = feeamount.mul(_feeToDistribute).div(10000);
-            uint256 remamountToPool = feeamount.sub(feeamountToPool).mul(_gonsPerFragment);
 
+            // Original amount for the pool
+            uint256 remamountToPoolOrg = feeamount.sub(feeamountToPool);
+            // Value amount for the pool
+            uint256 remamountToPool = remamountToPoolOrg.mul(_gonsPerFragment);
 
             _balances[_feescollector] = _balances[_feescollector].add(remamountToPool);
-            emit Transfer(sender, _feescollector, remamountToPool);
+            emit Transfer(sender, _feescollector, remamountToPoolOrg);
 
+            // Now, for the final fragment of the fee let's distribute among all holders
             uint256 finalFeeAmount = feeamountToPool.mul(_gonsPerFragment);
+
+            // Send amount to the empty wallet
             _balances[_emptyWallet] = _balances[_emptyWallet].add(finalFeeAmount);
-            emit Transfer(sender, _emptyWallet, finalFeeAmount);
-            rebase(feeamountToPool);
+            emit Transfer(sender, _emptyWallet, feeamountToPool);
+            
+            // Adjuts amount of all holders
+            adjust(feeamountToPool);
         } else {
-
+            // Simple transfer without fee
             _balances[recipient] = _balances[recipient].add(amount);
-            emit Transfer(sender, recipient, amount);
+            emit Transfer(sender, recipient, _amount);
         }
-    }
-
-    function _mint(address account, uint256 amount) internal virtual {
-        require(account != address(0), "ERC20: mint to the zero address");
-
-        _totalSupply = _totalSupply.add(amount);
-        _balances[account] = _balances[account].add(amount);
-        emit Transfer(address(0), account, amount);
     }
 
     function _burn(address account, uint256 amount) internal virtual {
@@ -258,7 +251,7 @@ contract Smarts is Ownable, IERC20 {
         emit Approval(owner, spender, amount);
     }
 
-    function rebase(uint256 feeamount)
+    function adjust(uint256 feeamount)
         internal
     {
         _elasticSupply = _elasticSupply.add(feeamount);
